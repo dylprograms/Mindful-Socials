@@ -1,5 +1,4 @@
 import { Users, Thoughts } from '../models/index.js';
-// get all users
 export const getAllUsers = async (_req, res) => {
     try {
         const dbUserData = await Users.find()
@@ -11,7 +10,6 @@ export const getAllUsers = async (_req, res) => {
         return res.status(500).json(err);
     }
 };
-// get single user by id
 export const getUserById = async (req, res) => {
     try {
         const dbUserData = await Users.findOne({ _id: req.params.userId })
@@ -28,18 +26,30 @@ export const getUserById = async (req, res) => {
         return res.status(500).json(err);
     }
 };
-// create a new user
+/*
+export const makeNewUser = async(req: Request, res: Response) => {
+  try {
+    const dbUserData = await Users.create(req.body);
+    return res.json(dbUserData);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+}
+  */
 export const makeNewUser = async (req, res) => {
+    if (!req.body.username || !req.body.email) {
+        return res.status(400).json({ message: "Username and email are required" });
+    }
     try {
         const dbUserData = await Users.create(req.body);
         return res.json(dbUserData);
     }
     catch (err) {
-        console.log(err);
-        return res.status(500).json(err);
+        console.error(err);
+        return res.status(500).json({ error: "Database error", details: err });
     }
 };
-// update a user
 export const updateCurrentUser = async (req, res) => {
     try {
         const dbUserData = await Users.findOneAndUpdate({ _id: req.params.userId }, {
@@ -58,14 +68,12 @@ export const updateCurrentUser = async (req, res) => {
         return res.status(500).json(err);
     }
 };
-// delete user (BONUS: and delete associated thoughts)
 export const deleteUser = async (req, res) => {
     try {
         const dbUserData = await Users.findOneAndDelete({ _id: req.params.userId });
         if (!dbUserData) {
             return res.status(404).json({ message: 'id has no user' });
         }
-        // BONUS: get ids of user's `thoughts` and delete them all
         await Thoughts.deleteMany({ _id: { $in: dbUserData.thoughts } });
         return res.json({ message: 'thoughts and user deleted' });
     }
@@ -74,7 +82,6 @@ export const deleteUser = async (req, res) => {
         return res.status(500).json(err);
     }
 };
-// add friend to friend list
 export const addFriend = async (req, res) => {
     try {
         const dbUserData = await Users.findOneAndUpdate({ _id: req.params.userId }, { $addToSet: { friends: req.params.friendId } }, { new: true });
@@ -88,7 +95,6 @@ export const addFriend = async (req, res) => {
         return res.status(500).json(err);
     }
 };
-// remove friend from friend list
 export const removeFriend = async (req, res) => {
     try {
         const dbUserData = await Users.findOneAndUpdate({ _id: req.params.userId }, { $pull: { friends: req.params.friendId } }, { new: true });

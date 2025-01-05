@@ -1,4 +1,4 @@
-import Users from './user.js';
+import Users from './users.js';
 import Thoughts from './thoughts.js';
 import ReactionSchema from './reactions.js'
 

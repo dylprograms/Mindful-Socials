@@ -67,17 +67,41 @@ export const deleteThought = async (req, res) => {
         return res.status(500).json(err);
     }
 };
+/*
+ export const newReaction = async(req: Request, res: Response) => {
+  try {
+    const dbThoughtData = await Thoughts.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $addToSet: { reactions: req.body } },
+      { runValidators: true, new: true }
+    );
+
+    if (!dbThoughtData) {
+      return res.status(404).json({ message: 'No thought with this id!' });
+    }
+    return res.json(dbThoughtData);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+}
+*/
 export const newReaction = async (req, res) => {
     try {
-        const dbThoughtData = await Thoughts.findOneAndUpdate({ _id: req.params.thoughtId }, { $addToSet: { reactions: req.body } }, { runValidators: true, new: true });
-        if (!dbThoughtData) {
-            return res.status(404).json({ message: 'No thought with this id!' });
+        const { thoughtId } = req.params;
+        // Ensure required fields are provided
+        if (!req.body.reactionBody || !req.body.username) {
+            return res.status(400).json({ message: "Both reactionBody and username are required." });
         }
-        return res.json(dbThoughtData);
+        const dbThoughtData = await Thoughts.findOneAndUpdate({ _id: thoughtId }, { $addToSet: { reactions: req.body } }, { runValidators: true, new: true });
+        if (!dbThoughtData) {
+            return res.status(404).json({ message: 'No thought with this ID found!' });
+        }
+        return res.status(201).json(dbThoughtData);
     }
     catch (err) {
-        console.log(err);
-        return res.status(500).json(err);
+        console.error('Error adding reaction:', err);
+        return res.status(500).json({ error: 'An error occurred while adding the reaction.', details: err });
     }
 };
 export const removeReaction = async (req, res) => {
