@@ -29,17 +29,6 @@ import { Users, Thoughts } from '../models/index.js';
      return res.status(500).json(err);
    }
  }
- /*
- export const makeNewUser = async(req: Request, res: Response) => {
-   try {
-     const dbUserData = await Users.create(req.body);
-     return res.json(dbUserData);
-   } catch (err) {
-     console.log(err);
-     return res.status(500).json(err);
-   }
- }
-   */
 
  export const makeNewUser = async (req: Request, res: Response) => {
   if (!req.body.username || !req.body.email) {
@@ -53,10 +42,6 @@ import { Users, Thoughts } from '../models/index.js';
     return res.status(500).json({ error: "Database error", details: err });
   }
 }
-
-
-
-
  export const  updateCurrentUser = async(req: Request, res: Response) => {
    try {
      const dbUserData = await Users.findOneAndUpdate(

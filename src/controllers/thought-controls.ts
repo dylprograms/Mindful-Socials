@@ -76,25 +76,6 @@ export const getThoughtById = async (req: Request, res: Response) => {
     return res.status(500).json(err);
   }
 }
-/*
- export const newReaction = async(req: Request, res: Response) => {
-  try {
-    const dbThoughtData = await Thoughts.findOneAndUpdate(
-      { _id: req.params.thoughtId },
-      { $addToSet: { reactions: req.body } },
-      { runValidators: true, new: true }
-    );
-
-    if (!dbThoughtData) {
-      return res.status(404).json({ message: 'No thought with this id!' });
-    }
-    return res.json(dbThoughtData);
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json(err);
-  }
-}
-*/
 export const newReaction = async (req: Request, res: Response): Promise<Response> => {
   try {
       const { thoughtId } = req.params;

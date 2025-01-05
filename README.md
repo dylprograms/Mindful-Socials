@@ -3,6 +3,8 @@
 
 ## Description
 
+[video link](https://drive.google.com/file/d/1Qte-td8xlVgH6QRuoX1QgWD802pFYN9Z/view?usp=sharing)
+
 This project is a social network API designed for a social media startup. It uses a NoSQL database (MongoDB) to handle large amounts of unstructured data efficiently. The API is built with Node.js, Express, TypeScript, and Mongoose, providing routes for users, thoughts, reactions, and friend lists.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
